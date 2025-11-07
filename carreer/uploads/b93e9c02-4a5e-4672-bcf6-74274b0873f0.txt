@@ -1,0 +1,62 @@
+Rohit Sharma
+Address: 
+Phone No: +91-7018406133 | Email: rohitshrama890@gmail.com | LinkedIn: linkedin.com/in/rohit-sharma-904972266 | GitHub: github.com/23f2002473
+
+---
+
+### Professional Summary
+
+Detail-oriented Software Developer with up to 2 years of professional experience specializing in building robust web crawlers and data extraction tools. Proficient in crafting complex scraping solutions including captcha and reCAPTCHA bypass, and proxy management to efficiently gather data at scale. Experienced in deploying machine learning models to production environments and leveraging DevOps technologies like Docker and Kubernetes for streamlined software deployment and scalability. Adept at collaborating with teams to translate business needs into technical solutions while maintaining high code quality and effective communication.
+
+---
+
+### Education
+
+**BTech in Computer Science (AI & ML)**
+JawaharLal Nehru Govt. Eng. College Sundernagar, India | 2022 – 2026
+
+**BS in Data Science and Applications (Diploma level)**
+Indian Institute of Technology, Madras India | 2023 – 2027
+
+---
+
+### Work Experience
+
+**Ingenx Technology Pvt. Ltd | Gurugram, H.R | ML & AI Intern** | June 2024 - July 2024
+
+* Engineered and maintained sophisticated web scraping pipelines using Python and Scrapy, incorporating advanced regular expressions and Perl scripting for data cleansing and parsing across diverse web technologies.
+* Developed automated systems to bypass captchas and reCAPTCHA challenges, enhancing the efficiency of web crawlers deployed in environments with anti-scraping measures.
+* Integrated proxy rotation techniques to sustain uninterrupted data collection and minimize IP blocking risks, optimizing crawler reliability.
+* Collaborated with DevOps teams to containerize applications using Docker, ensuring seamless deployment and scalability across development and production stages.
+
+**Indian Institute of Technology, Mandi (H.P) | Mandi, H.P | Summer Intern** | June 2025 - July 2025
+
+* Participated in research and development of data crawling frameworks, addressing challenges related to diverse web sources and dynamic content extraction.
+* Employed Python scripting and web technologies to prototype scalable crawlers capable of handling complex navigation and anti-bot mechanisms.
+* Assisted in deploying machine learning models in production environments, focusing on automating model integration with data pipelines.
+* Utilized Kubernetes for container orchestration to improve deployment consistency and fault tolerance.
+
+---
+
+### Skills
+
+* Programming Languages: Python, Perl
+* Web Technologies & Web Scraping: Scrapy, Regular Expressions, HTTP protocols, Proxy management
+* Software Development: Agile methodologies, Version control (Git), Docker, Kubernetes
+* Data Handling & Machine Learning: Model productionizing, Data preprocessing
+
+---
+
+### Projects
+
+**Advanced Web Scraper with Captcha and Proxy Handling**
+
+* Designed a web scraper tool capable of circumventing captcha and reCAPTCHA security layers using automated solving and proxy rotation techniques, improving data extraction success rates by over 30%.
+* Implemented robust parsing modules with Python and regular expressions to accurately extract structured data from complex HTML sources.
+
+**Production Deployment of Machine Learning Models**
+
+* Developed pipelines to streamline deployment of ML models using Docker containers, reducing setup time and enabling scalable inference.
+* Coordinated container orchestration with Kubernetes clusters to manage application availability and load balancing in production environments.
+
+---

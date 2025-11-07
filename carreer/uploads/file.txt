@@ -1,0 +1,61 @@
+---
+
+Rohit Sharma
+Address: Sundernagar, Himachal Pradesh, India
+Phone No: +91-7018406133 | Email: rohitshrama890@gmail.com | LinkedIn: linkedin.com/in/rohit-sharma-904972266 | GitHub: github.com/23f2002473
+
+---
+
+### Professional Summary
+
+Detail-oriented Software Developer with solid experience in web scraping, complex crawling techniques including Captcha and proxy bypass, and productionizing machine learning models. Proficient in Python, Scrapy, Perl, and regular expressions to develop robust automated web data extraction solutions. Equipped with skills in containerization and orchestration using Docker and Kubernetes for scalable deployment. Excellent communicator with experience working in collaborative environments and delivering efficient development outcomes.
+
+---
+
+### Education
+
+BTech in Computer Science (AI & ML)
+JawaharLal Nehru Govt. Eng. College Sundernagar, India | 2022 – 2026
+
+BS in Data Science and Applications (Diploma level)
+Indian Institute of Technology, Madras, India | 2023 – 2027
+
+---
+
+### Work Experience
+
+Indian Institute of Technology, Mandi | Himachal Pradesh, India | Software Development Intern | June 2025 - July 2025
+
+* Engineered and optimized web crawling frameworks employing Python and Scrapy to handle complex Captcha and recaptcha challenges, achieving a 25% improvement in scraping success rates.
+* Designed proxy rotation and bypass mechanisms to ensure uninterrupted data crawling from protected sources, strengthening reliability of the data pipeline.
+* Collaborated in integrating machine learning models into production workflows, enhancing data processing pipelines and improving navigation success in simulated environments.
+* Utilized regular expressions and web technologies to parse and structure diverse web data efficiently, reducing processing latency by 20%.
+
+Ingenx Technology Pvt. Ltd | Gurugram, Haryana, India | Software Developer Intern | June 2024 - July 2024
+
+* Developed scalable web scraping applications with Python and Perl, automating complex data extraction tasks from dynamic web platforms.
+* Applied techniques for bypassing anti-scraping mechanisms including advanced Captcha evasion, enhancing the robustness of crawling operations.
+* Built Docker container images and managed deployment configurations, streamlining development environments and assisting in Kubernetes orchestration initialization.
+
+---
+
+### Skills
+
+* Programming Languages: Python, Perl
+* Web Technologies & Frameworks: Scrapy, Regular Expressions, Web Scraping, General Web Technologies
+* DevOps Tools: Docker, Kubernetes
+* Software Development: Automated crawling, Proxy handling, Captcha and recaptcha bypass, Productionizing ML models
+
+---
+
+### Projects
+
+Advanced Web Crawler for Protected Content
+
+* Developed an automated web crawler using Python and Scrapy capable of bypassing Captcha and proxy restrictions, increasing data extraction coverage by 30% while maintaining compliance with site policies.
+
+ML Model Production Pipeline
+
+* Contributed to the deployment and optimization of machine learning models into production environments using containerization tools including Docker and Kubernetes, facilitating scalable and reliable inference services.
+
+---
