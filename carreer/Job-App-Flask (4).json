@@ -1,0 +1,1077 @@
+{
+  "name": "Job-App-Flask",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "acbef742-9d51-4d52-bca0-c1bc5c9104b0",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        128,
+        64
+      ],
+      "id": "3ba93bc3-ce24-4485-a1d8-bc9c539d8565",
+      "name": "Frontend input",
+      "webhookId": "acbef742-9d51-4d52-bca0-c1bc5c9104b0"
+    },
+    {
+      "parameters": {
+        "operation": "pdf",
+        "binaryPropertyName": "resume",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        272,
+        64
+      ],
+      "id": "0b57e767-0f76-40e2-bd67-b1c22907ff41",
+      "name": "Extract data from pdf"
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n  \"Name\": \"John Doe\",\n  \"Address\": \"123 Main Street, New York, NY 10001\",\n  \"Email\": \"john.doe@example.com\",\n  \"Education\": [\n    {\n      \"Degree\": \"Bachelor of Technology in Computer Science\",\n      \"Institution\": \"XYZ University\",\n      \"Grade\": \"8.5 CGPA\",\n      \"Year\": 2022\n    },\n    {\n      \"Degree\": \"Higher Secondary (Class XII)\",\n      \"Institution\": \"ABC School\",\n      \"Grade\": \"92%\",\n      \"Year\": 2018\n    }\n  ]\n}\n"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.2,
+      "position": [
+        608,
+        208
+      ],
+      "id": "129ef296-8926-4e56-8bd3-306eb2660734",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You will be provided with a resume in plain text format.\nYour job is to extract the following fields of information:\n\nName\n\nAddress\n\nEmail\n\nEducation – including:\n\n--Degree\n\n--Institution Name\n\n--Grades (e.g., GPA or percentage)\n\n--Passing Year\n\n\nHere is a resume in text format\n{{ $json.text }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "You are a helpful assistant"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        432,
+        64
+      ],
+      "id": "9e3b2d95-db4d-4a72-af89-36c3989420ae",
+      "name": "Personal Details Extract"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "49498680-e012-4e45-845f-d4ad56e8012d",
+              "name": "output.Name",
+              "value": "={{ $json.output.Name }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        736,
+        64
+      ],
+      "id": "6db24a6c-c394-413f-8cd0-ebe6f9015b14",
+      "name": "Drive Details Set"
+    },
+    {
+      "parameters": {
+        "resource": "folder",
+        "name": "={{ $json.output.Name }} Resume Folder",
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "1VVXvgBzOant99AhWHMAJ_QnSrOGZllSR",
+          "mode": "list",
+          "cachedResultName": "Job-App",
+          "cachedResultUrl": "https://drive.google.com/drive/folders/1VVXvgBzOant99AhWHMAJ_QnSrOGZllSR"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        880,
+        64
+      ],
+      "id": "7208d646-91f2-4c0c-b934-fd6a18ddfb7d",
+      "name": "Google Drive",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "TqOLhN316MWC0dqd",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "c254f1d3-7cbc-443d-8960-7f2471e5f1af",
+              "name": "Name",
+              "value": "={{ $('Personal Details Extract').item.json.output.Name }}",
+              "type": "string"
+            },
+            {
+              "id": "eb3fdb88-6a90-4486-9af1-59416d130c42",
+              "name": "Address",
+              "value": "={{ $('Personal Details Extract').item.json.output.Address }}",
+              "type": "string"
+            },
+            {
+              "id": "a9d0d850-4eba-4a02-aedd-c7ce996631c0",
+              "name": "Email",
+              "value": "={{ $('Personal Details Extract').item.json.output.Email }}",
+              "type": "string"
+            },
+            {
+              "id": "44ec8204-226d-446c-928f-a17ce8c8c18f",
+              "name": "Role",
+              "value": "={{ $('Frontend input').item.json.body.title }}",
+              "type": "string"
+            },
+            {
+              "id": "0ba2ea79-d68b-4def-aef7-30ed46c493f9",
+              "name": "Experience",
+              "value": "={{ $('Frontend input').item.json.body.experience }}",
+              "type": "string"
+            },
+            {
+              "id": "bf3c0648-4102-4e37-ba6d-38318283e7a1",
+              "name": "Location",
+              "value": "={{ $('Frontend input').item.json.body.location }}",
+              "type": "string"
+            },
+            {
+              "id": "204aa260-0793-4139-8942-5a677614a29a",
+              "name": "Github",
+              "value": "={{ $('Frontend input').item.json.body.github }}",
+              "type": "string"
+            },
+            {
+              "id": "83ea0846-2c06-465e-b5e7-7f7a559060b5",
+              "name": "LinkedIn",
+              "value": "={{ $('Frontend input').item.json.body.linkedin }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1008,
+        64
+      ],
+      "id": "8f92f1a6-ec3a-4ee4-9de7-0f1757bae47a",
+      "name": "Primary Details"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://localhost:5002/api/primary-record",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "Name",
+              "value": "={{ $json.Name }}"
+            },
+            {
+              "name": "Address",
+              "value": "={{ $json.Address }}"
+            },
+            {
+              "name": "Email",
+              "value": "={{ $json.Email }}"
+            },
+            {
+              "name": "Role",
+              "value": "={{ $json.Role }}"
+            },
+            {
+              "name": "Experience",
+              "value": "={{ $json.Experience }}"
+            },
+            {
+              "name": "Location",
+              "value": "={{ $json.Location }}"
+            },
+            {
+              "name": "Github",
+              "value": "={{ $json.Github }}"
+            },
+            {
+              "name": "LinkedIn",
+              "value": "={{ $json.LinkedIn }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1200,
+        64
+      ],
+      "id": "6ef790c1-b5c0-412c-9de7-71c385a27a45",
+      "name": "Store Primary Record API"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://localhost:5002/api/create-personal-sheet",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "name",
+              "value": "={{ $json.Name }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1344,
+        64
+      ],
+      "id": "9de1814b-c500-45ca-8e48-d148fc4288be",
+      "name": "Create Personal Sheet API"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "4571d934-4ac4-4e37-aea1-7cc4015de26e",
+              "name": "Role",
+              "value": "={{ $('Store Primary Record API').item.json.record.Role }}",
+              "type": "string"
+            },
+            {
+              "id": "4c00cb05-3892-4763-9980-1ed824f3be3e",
+              "name": "Experience",
+              "value": "={{ $('Store Primary Record API').item.json.record.Experience }}",
+              "type": "string"
+            },
+            {
+              "id": "b303924e-b06e-4211-b37e-ade8a45eed3f",
+              "name": "Location",
+              "value": "={{ $('Store Primary Record API').item.json.record.Location }}",
+              "type": "string"
+            },
+            {
+              "id": "dd6c54c0-e5b2-4ca9-8344-b751b9731eb4",
+              "name": "freshness",
+              "value": "7",
+              "type": "string"
+            },
+            {
+              "id": "7df9b4a8-5e5c-40bb-a6c6-e7a2b380651c",
+              "name": "maxJobs",
+              "value": 50,
+              "type": "number"
+            },
+            {
+              "id": "256385e1-b2d7-47b7-b4c7-f27b65baee03",
+              "name": "url",
+              "value": "https://api.apify.com/v2/acts/muhammetakkurtt~naukri-job-scraper/run-sync-get-dataset-items?token=apify_api_IYDKvcNEtOCfQRIUEWXZuZFHCAg01V2DzU3Z",
+              "type": "string"
+            },
+            {
+              "id": "sheet_id_url",
+              "name": "sheet_id",
+              "value": "={{ $json.sheet_id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1488,
+        64
+      ],
+      "id": "5d896593-312a-40e1-8935-a58d90bcc512",
+      "name": "URL Fields"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $json.url }}",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {}
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "title",
+              "value": "={{ $json.Role }}"
+            },
+            {
+              "name": "experience",
+              "value": "={{ $json.Experience }}"
+            },
+            {
+              "name": "location",
+              "value": "={{ $json.Location }}"
+            },
+            {
+              "name": "freshness",
+              "value": "={{ $json.freshness }}"
+            },
+            {
+              "name": "maxJobs",
+              "value": "={{ $json.maxJobs }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1632,
+        64
+      ],
+      "id": "46e5e7cc-be5d-4662-8584-c43c2353f2c2",
+      "name": "Job Request URL",
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\nconst seen = new Set();\nconst output = [];\n\nfor (const item of items) {\n  const key = `${item.json.title}-${item.json.companyName}`;\n  \n  if (!seen.has(key)) {\n    seen.add(key);\n    output.push(item);\n  }\n}\n\nreturn output;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1776,
+        64
+      ],
+      "id": "5646e0df-6720-4832-ad43-c1b18aa0f92a",
+      "name": "Remove Duplicates"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "f8939f50-c135-4383-b961-2e986134e8cf",
+              "name": "Job Title",
+              "value": "={{ $json.title }}",
+              "type": "string"
+            },
+            {
+              "id": "29e0cd79-374c-46c6-95a4-9de21f225bb5",
+              "name": "Company Name",
+              "value": "={{ $json.companyName }}",
+              "type": "string"
+            },
+            {
+              "id": "e56c9042-6333-44e3-b67f-670297787dac",
+              "name": "Job Skills",
+              "value": "={{ $json.tagsAndSkills }}",
+              "type": "string"
+            },
+            {
+              "id": "7ecd7ac3-5ac4-4f5f-98a3-0ef0cf34cf6a",
+              "name": "Job Description",
+              "value": "={{ $json.jobDescription }}",
+              "type": "string"
+            },
+            {
+              "id": "73992504-2c6a-4005-a832-a84dbe2f20af",
+              "name": "Job Link",
+              "value": "={{ $json.jdURL }}",
+              "type": "string"
+            },
+            {
+              "id": "sheet_id_job",
+              "name": "sheet_id",
+              "value": "={{ $('URL Fields').item.json.sheet_id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1920,
+        64
+      ],
+      "id": "1c283680-fc9d-49a1-a65b-4c61b77f1b6d",
+      "name": "Job Details Set"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://localhost:5000/store-job-data",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "sheet_id",
+              "value": "={{ $json.sheet_id }}"
+            },
+            {
+              "name": "jobs",
+              "value": "={{\n[ { \n   \"Job Title\": $json[\"Job Title\"],\n   \"Company Name\": $json[\"Company Name\"],\n   \"Job Skills\": $json[\"Job Skills\"],\n   \"Job Description\": $json[\"Job Description\"],\n   \"Job Link\": $json[\"Job Link\"]\n  } ]\n}}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2064,
+        64
+      ],
+      "id": "77102f0c-81be-46ec-ad06-9e18eb6c82e1",
+      "name": "Store Job Details API"
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:5002/api/get-jobs",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {}
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2208,
+        64
+      ],
+      "id": "23d591c1-4a96-4fce-9b25-7fc0f146094e",
+      "name": "Extract Jobs API",
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\nif (!items[0] || !items[0].json.jobs) {\n  return [];\n}\n\nconst jobs = items[0].json.jobs;\nconst sheet_id = $('Job Details Set').item.json.sheet_id;\n\nconst result = jobs.map((job) => ({\n  json: {\n    jobtitle: job[\"Job Title\"],\n    companyName: job[\"Company Name\"],\n    skills: job[\"Job Skills\"],\n    description: job[\"Job Description\"],\n    joburl: job[\"Job Link\"],\n    sheet_id: \"job_data\"\n  }\n}));\nreturn result;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2352,
+        64
+      ],
+      "id": "407479d8-ebc3-47c4-915a-6c46ab3e142b",
+      "name": "Parse Jobs"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        2496,
+        64
+      ],
+      "id": "8e9b8864-d3de-476e-aa42-1f5c20bf7e56",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "f1e593f1-16fa-4f45-8fda-01157165fe15",
+              "name": "jobtitle",
+              "value": "={{ $json.jobtitle }}",
+              "type": "string"
+            },
+            {
+              "id": "049d4020-7ebd-42f7-8bc2-85a6abbb17ff",
+              "name": "companyName",
+              "value": "={{ $json.companyName }}",
+              "type": "string"
+            },
+            {
+              "id": "7c6fa167-98ea-44ea-ae50-69d5476c786c",
+              "name": "skills",
+              "value": "={{ $json.skills }}",
+              "type": "string"
+            },
+            {
+              "id": "aa7bbe0c-6ca0-47d4-b784-a4dbfe5657a7",
+              "name": "description",
+              "value": "={{ $json.description }}",
+              "type": "string"
+            },
+            {
+              "id": "6419e976-0c3d-425e-b289-ff604228956e",
+              "name": "joburl",
+              "value": "={{ $json.joburl }}",
+              "type": "string"
+            },
+            {
+              "id": "sheet_id_edit",
+              "name": "sheet_id",
+              "value": "={{ $json.sheet_id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2640,
+        64
+      ],
+      "id": "e1be510e-ce7c-47a5-a54c-6a1d81ae980e",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=**Prompt:**\n\nRewrite my resume entirely from scratch to match the job title, job description, and job skills below. Do not reuse any phrasing from my original resume – except for my name, contact details, LinkedIn/GitHub links, education (college/school names), and company names.\n\n**Job Title:**\n{{ $json.jobtitle }}\n**Job Description:**\n{{ $json.description }}\n**Job Skills:**\n{{ $json.skills }}\n**Instructions:**\n**My Old Resume (Use only for reference, not reuse):**\n{{ $('Extract data from pdf').item.json.text }}\n\n**Instructions:**\n\n* Extract all personal details (name, address, phone, email, LinkedIn, GitHub), education (college/school names), and company names from my original resume.\n* Create a **brand-new, professional, ATS-optimized resume** tailored to the job.\n* Incorporate relevant keywords from the **job title, description, and skills** into:\n\n  * **The professional summary**\n  * **The skills section**\n  * **The work experience bullet points**\n* **Do not reuse** any phrasing from the old resume—only extract the raw details.\n* Format the resume to be:\n\n  * **Clean and readable** (professional layout)\n  * **Bullet-point-based for experience**\n  * **Consistently structured with strong action verbs**\n* Use the provided **job skills explicitly within each work experience bullet point**, aligning each task with the required competencies.\n* Expand on each bullet point to provide **more elaborate and result-oriented content**.\n* **Highlight keywords** from the job description and skills where appropriate to improve ATS ranking.\n* **Output must strictly be in this format**:\n\n---\n\n**\\[Full Name]**\n**Address:** \\[Full Address]\n**Phone No:** \\[Phone Number] | **Email:** \\[Email Address] | **LinkedIn:** \\[LinkedIn URL] | **GitHub:** \\[GitHub URL]\n\n---\n\n### **Professional Summary**\n\n\\[Updated summary tailored to job title and description]\n\n---\n\n### **Education**\n\n**\\[Degree]**\n\\[College Name] | \\[Location] | \\[Start Date] - \\[End Date]\n\n**\\[School Level]**\n\\[School Name] | \\[Location] | \\[Start Date] - \\[End Date]\n\n---\n\n### **Work Experience**\n\n**\\[Company Name] | \\[Location] | \\[Job Title]** | \\[Start Date] - \\[End Date]\n\n* \\[Updated bullet point 1]\n* \\[Updated bullet point 2]\n* \\[Updated bullet point 3]\n* \\[Updated bullet point 4]\n\n**\\[Company Name] | \\[Location] | \\[Job Title]** | \\[Start Date] - \\[End Date]\n\n* \\[Updated bullet point 1]\n* \\[Updated bullet point 2]\n* \\[Updated bullet point 3]\n\n---\n\n### **Skills**\n\n* [Skill category]: [skills]\n* [Skill category]: [skills]\n* [Skill category]: [skills]\n\n---\n\n### **Projects**\n\n**\\[Project Title]**\n\n* \\[Project description with relevant tools and results]\n\n**\\[Project Title]**\n\n* \\[Project description with relevant tools and results]\n\n---\n\n**I do not want any other content like an introduction or explanation added at the end.**\n",
+        "hasOutputParser": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        2784,
+        64
+      ],
+      "id": "74f282fa-51c7-4052-beec-6976d6fe0e02",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.toolThink",
+      "typeVersion": 1,
+      "position": [
+        2864,
+        208
+      ],
+      "id": "bcd1e9df-d883-473c-8c0e-59b334fac500",
+      "name": "Think"
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "[\n  {\n    \"output\": \"Here's your brand-new, ATS-optimized resume tailored for the **Software Developer** role...\\n\\n---\\n\\n**Aloys Jehwin J**\\n8/32 Aranmanai St...\"\n  }\n]\n"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.2,
+      "position": [
+        2992,
+        208
+      ],
+      "id": "a3ea46b8-bbe5-45e5-9a19-cae81c7e5fe2",
+      "name": "Structured Output Parser1"
+    },
+    {
+      "parameters": {
+        "operation": "toText",
+        "sourceProperty": "output[0].output",
+        "binaryPropertyName": "updatedResume",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        2896,
+        -144
+      ],
+      "id": "c663fc0a-61eb-46b7-8ae2-5f8107efda00",
+      "name": "Convert to File"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "d3c02a51-e09a-45b2-95d5-cce6f5d848ad",
+              "name": "jobtitle",
+              "value": "={{ $('Edit Fields1').item.json.jobtitle }}",
+              "type": "string"
+            },
+            {
+              "id": "0fb19e48-b361-47c1-92c7-8e54350af1ed",
+              "name": "companyName",
+              "value": "={{ $('Edit Fields1').item.json.companyName }}",
+              "type": "string"
+            },
+            {
+              "id": "sheet_id_edit_fields",
+              "name": "sheet_id",
+              "value": "={{ $('Edit Fields1').item.json.sheet_id }}",
+              "type": "string"
+            },
+            {
+              "id": "joburl_edit_fields",
+              "name": "joburl",
+              "value": "={{ $('Edit Fields1').item.json.joburl }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        3072,
+        64
+      ],
+      "id": "730424fe-a1f2-439e-8bd8-90667ca5bf36",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://localhost:5003/upload-resume",
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "parameterType": "formBinaryData",
+              "name": "file",
+              "inputDataFieldName": "updatedResume"
+            },
+            {
+              "name": "filename",
+              "value": "={{ $json.jobtitle }} {{ $json.companyName }} Resume"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        3216,
+        64
+      ],
+      "id": "124fff60-1562-42e1-88dd-dc9a12b5ed23",
+      "name": "HTTP Request",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        384,
+        224
+      ],
+      "id": "1de6b380-8b7d-4ff5-b66c-156233895bab",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "r14Zv77JBXMs0O6O",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        2736,
+        208
+      ],
+      "id": "5ef4a36a-7537-4842-b9d9-5ea3f490ad52",
+      "name": "OpenAI Chat Model1",
+      "credentials": {
+        "openAiApi": {
+          "id": "r14Zv77JBXMs0O6O",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {
+          "responseCode": 200,
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "data",
+                "value": "={{ $json.data }}"
+              }
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        3536,
+        128
+      ],
+      "id": "66511f51-9f25-4d8a-b849-4588b3fccb3b",
+      "name": "Respond to Webhook"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Frontend input": {
+      "main": [
+        [
+          {
+            "node": "Extract data from pdf",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract data from pdf": {
+      "main": [
+        [
+          {
+            "node": "Personal Details Extract",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Personal Details Extract",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Personal Details Extract": {
+      "main": [
+        [
+          {
+            "node": "Drive Details Set",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Drive Details Set": {
+      "main": [
+        [
+          {
+            "node": "Google Drive",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Drive": {
+      "main": [
+        [
+          {
+            "node": "Primary Details",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Primary Details": {
+      "main": [
+        [
+          {
+            "node": "Store Primary Record API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Store Primary Record API": {
+      "main": [
+        [
+          {
+            "node": "Create Personal Sheet API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Personal Sheet API": {
+      "main": [
+        [
+          {
+            "node": "URL Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "URL Fields": {
+      "main": [
+        [
+          {
+            "node": "Job Request URL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Job Request URL": {
+      "main": [
+        [
+          {
+            "node": "Remove Duplicates",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Remove Duplicates": {
+      "main": [
+        [
+          {
+            "node": "Job Details Set",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Job Details Set": {
+      "main": [
+        [
+          {
+            "node": "Store Job Details API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Store Job Details API": {
+      "main": [
+        [
+          {
+            "node": "Extract Jobs API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Jobs API": {
+      "main": [
+        [
+          {
+            "node": "Parse Jobs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Jobs": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Convert to File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Think": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser1": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert to File": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Personal Details Extract",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Respond to Webhook": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  },
+  "versionId": "99084d4b-9b10-40a6-9cd6-295e8c36e9cf",
+  "meta": {
+    "instanceId": "5f48ca45618e9a9b75f462b114640e2ec8d1eb13b4c3d38de306d242138a4e14"
+  },
+  "id": "aw2itWuAwmwnWJqI",
+  "tags": []
+}
