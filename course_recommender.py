@@ -3,9 +3,9 @@ import pandas as pd
 import ast
 from sentence_transformers import SentenceTransformer, util
 import torch
-
+from flask_cors import CORS
 app = Flask(__name__)
-
+CORS(app)
 # ======== Load Data and Model Once ========
 
 # Load dataset
